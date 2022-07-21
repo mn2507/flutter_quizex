@@ -15,12 +15,10 @@ class MenuOptions extends StatefulWidget {
 
 class _MenuOptionsState extends State<MenuOptions> {
   String questionsDropdownValue = '10';
-  String categoryDropdownValue = 'One';
-  String difficultyDropdownValue = 'One';
-  String typeDropdownValue = 'One';
+  String categoryDropdownValue;
+  String difficultyDropdownValue = 'Any';
+  String typeDropdownValue = 'Any';
 
-  var _isInit = true;
-  var _isLoading = false;
   List<Category> _category;
   String _errorMessage;
   Status _status;
@@ -153,13 +151,13 @@ class _MenuOptionsState extends State<MenuOptions> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<String>(
+                        child: DropdownButton(
+                          hint: const Text('Any'),
                           value: categoryDropdownValue,
-                          items: <String>['One', 'Two', 'Free', 'Four']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          items: _category.map((category) {
+                            return DropdownMenuItem(
+                              value: category.name,
+                              child: Text(category.name),
                             );
                           }).toList(),
                           onChanged: (String newValue) {
@@ -181,7 +179,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                         margin: const EdgeInsets.only(left: 8.0),
                         child: DropdownButton<String>(
                           value: difficultyDropdownValue,
-                          items: <String>['One', 'Two', 'Free', 'Four']
+                          items: <String>['Any', 'Easy', 'Medium', 'Hard']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -207,7 +205,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                         margin: const EdgeInsets.only(left: 8.0),
                         child: DropdownButton<String>(
                           value: typeDropdownValue,
-                          items: <String>['One', 'Two', 'Free', 'Four']
+                          items: <String>['Any', 'Multiple Choice', 'True/False']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
