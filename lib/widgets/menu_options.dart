@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizex_flutter/providers/category.dart';
+import 'package:quizex_flutter/providers/categoriesProvider.dart';
+import 'package:quizex_flutter/providers/questionParams.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
 
 class MenuOptions extends StatefulWidget {
@@ -21,7 +23,9 @@ class _MenuOptionsState extends State<MenuOptions> {
 
   List<Category> _category;
   String _errorMessage;
-  Status _status;
+  CategoryStatus _categoryStatus;
+  QuestionsStatus _questionsStatus;
+  QuestionParams _questionParams;
 
   final _questions = const [
     {
@@ -68,15 +72,14 @@ class _MenuOptionsState extends State<MenuOptions> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final categoryState = Provider.of<QuestionsProvider>(context);
-    _status = categoryState.status;
+    final categoryState = Provider.of<CategoriesProvider>(context);
+    _categoryStatus = categoryState.categoryStatus;
     _errorMessage = categoryState.errorMessage;
-    if (_status == Status.DONE) {
+    if (_categoryStatus == CategoryStatus.DONE) {
       _category = categoryState.items;
-      print("category: $_category");
+      // print("category: $_category");
     }
-
-    print("status: $_status");
+    // print("status: $_categoryStatus");
   }
 
   void _resetQuiz() {
@@ -102,6 +105,43 @@ class _MenuOptionsState extends State<MenuOptions> {
     }
   }
 
+  void _setOptions() {
+    setState(() {
+      _questionParams = QuestionParams(
+        amount: questionsDropdownValue,
+        category: categoryDropdownValue,
+        difficulty: difficultyDropdownValue,
+        type: typeDropdownValue,
+      );
+    });
+  }
+
+  Future<void> _startQuiz() async {
+    try {
+      _questionsStatus = QuestionsStatus.LOADING;
+      await Provider.of<QuestionsProvider>(context, listen: false)
+          .generateQuestions(_questionParams);
+      _questionsStatus = QuestionsStatus.DONE;
+    } catch (error) {
+      _questionsStatus = QuestionsStatus.ERROR;
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An error occurred!'),
+          content: Text('Something went wrong.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -111,7 +151,7 @@ class _MenuOptionsState extends State<MenuOptions> {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text("Quizex")),
-          body: _status == Status.DONE
+          body: _categoryStatus == CategoryStatus.DONE
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -156,7 +196,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                           value: categoryDropdownValue,
                           items: _category.map((category) {
                             return DropdownMenuItem(
-                              value: category.name,
+                              value: category.id,
                               child: Text(category.name),
                             );
                           }).toList(),
@@ -205,8 +245,11 @@ class _MenuOptionsState extends State<MenuOptions> {
                         margin: const EdgeInsets.only(left: 8.0),
                         child: DropdownButton<String>(
                           value: typeDropdownValue,
-                          items: <String>['Any', 'Multiple Choice', 'True/False']
-                              .map<DropdownMenuItem<String>>((String value) {
+                          items: <String>[
+                            'Any',
+                            'Multiple Choice',
+                            'True/False'
+                          ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
@@ -219,10 +262,39 @@ class _MenuOptionsState extends State<MenuOptions> {
                           },
                         ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: SizedBox(
+                          height: 50,
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _setOptions();
+                              _startQuiz();
+                            },
+                            child: const Text('Start Quiz'),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: SizedBox(
+                          height: 50,
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('Scoreboard'),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 )
-              : _status == Status.ERROR
+              : _categoryStatus == CategoryStatus.ERROR
                   ? Center(
                       child: Text("$_errorMessage"),
                     )
