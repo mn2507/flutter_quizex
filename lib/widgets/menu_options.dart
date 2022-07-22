@@ -18,8 +18,8 @@ class MenuOptions extends StatefulWidget {
 class _MenuOptionsState extends State<MenuOptions> {
   String questionsDropdownValue = '10';
   String categoryDropdownValue;
-  String difficultyDropdownValue = 'Any';
-  String typeDropdownValue = 'Any';
+  String difficultyDropdownValue = '';
+  String typeDropdownValue = '';
 
   List<Category> _category;
   String _errorMessage;
@@ -27,6 +27,18 @@ class _MenuOptionsState extends State<MenuOptions> {
   QuestionsStatus _questionsStatus;
   QuestionParams _questionParams;
 
+  final _difficulty = const [
+    {'value': '', 'label': 'Any'},
+    {'value': 'easy', 'label': 'Easy'},
+    {'value': 'medium', 'label': 'Medium'},
+    {'value': 'hard', 'label': 'Hard'},
+  ];
+
+  final _type = const [
+    {'value': '', 'label': 'Any'},
+    {'value': 'multiple', 'label': 'Multiple'},
+    {'value': 'boolean', 'label': 'True/False'},
+  ];
   final _questions = const [
     {
       'questionText': 'What\'s your favorite color?',
@@ -119,19 +131,20 @@ class _MenuOptionsState extends State<MenuOptions> {
   Future<void> _startQuiz() async {
     try {
       _questionsStatus = QuestionsStatus.LOADING;
-      await Provider.of<QuestionsProvider>(context, listen: false)
-          .generateQuestions(_questionParams);
+      var questionsResponse =
+          await Provider.of<QuestionsProvider>(context, listen: false)
+              .generateQuestions(_questionParams);
       _questionsStatus = QuestionsStatus.DONE;
     } catch (error) {
       _questionsStatus = QuestionsStatus.ERROR;
       await showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('An error occurred!'),
-          content: Text('Something went wrong.'),
+          title: const Text('An error occurred!'),
+          content: const Text('Something went wrong.'),
           actions: <Widget>[
             FlatButton(
-              child: Text('Okay'),
+              child: const Text('Okay'),
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -196,7 +209,8 @@ class _MenuOptionsState extends State<MenuOptions> {
                           value: categoryDropdownValue,
                           items: _category.map((category) {
                             return DropdownMenuItem(
-                              value: category.id,
+                              value: category
+                                  .id, //this is the sample, category fetched from API and shown here, this works
                               child: Text(category.name),
                             );
                           }).toList(),
@@ -219,11 +233,15 @@ class _MenuOptionsState extends State<MenuOptions> {
                         margin: const EdgeInsets.only(left: 8.0),
                         child: DropdownButton<String>(
                           value: difficultyDropdownValue,
-                          items: <String>['Any', 'Easy', 'Medium', 'Hard']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          items: _difficulty.map((difficulty) {
+                            return DropdownMenuItem(
+                              value: difficulty['value'], //
+                              child: Text(difficulty['label']),
+                              // items: <String>['Any', 'Easy', 'Medium', 'Hard']
+                              //     .map<DropdownMenuItem<String>>((String value) {
+                              //   return DropdownMenuItem<String>(
+                              //     value: value,
+                              //     child: Text(value),
                             );
                           }).toList(),
                           onChanged: (String newValue) {
@@ -245,14 +263,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                         margin: const EdgeInsets.only(left: 8.0),
                         child: DropdownButton<String>(
                           value: typeDropdownValue,
-                          items: <String>[
-                            'Any',
-                            'Multiple Choice',
-                            'True/False'
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                          items: _type.map((type) {
+                            return DropdownMenuItem(
+                              value: type['value'],
+                              child: Text(type['label']),
                             );
                           }).toList(),
                           onChanged: (String newValue) {

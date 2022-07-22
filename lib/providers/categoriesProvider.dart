@@ -74,25 +74,25 @@ class CategoriesProvider with ChangeNotifier {
     }
   }
 
-  Future<void> generateQuestions(QuestionParams questionParams) async {
-    var queryParameters = {
-      'amount': questionParams.amount,
-      'category': questionParams.category,
-      'difficulty': questionParams.difficulty,
-      'type': questionParams.type,
-    };
-    var url = Uri.https('opentdb.com', '/api.php', queryParameters);
-    try {
-      final response = await http.post(url);
-      print("response $response");
-      // _items.add(newProduct);
-      // _items.insert(0, newProduct); // at the start of the list
-      notifyListeners();
-    } catch (error) {
-      print(error);
-      throw error;
-    }
-  }
+  // Future<void> generateQuestions(QuestionParams questionParams) async {
+  //   var queryParameters = {
+  //     'amount': questionParams.amount,
+  //     'category': questionParams.category,
+  //     'difficulty': questionParams.difficulty,
+  //     'type': questionParams.type,
+  //   };
+  //   var url = Uri.https('opentdb.com', '/api.php', queryParameters);
+  //   try {
+  //     final response = await http.post(url);
+  //     print("response $response");
+  //     // _items.add(newProduct);
+  //     // _items.insert(0, newProduct); // at the start of the list
+  //     notifyListeners();
+  //   } catch (error) {
+  //     print(error);
+  //     throw error;
+  //   }
+  // }
 
   // void updateProduct(String id, Product newProduct) {
   //   final prodIndex = _items.indexWhere((prod) => prod.id == id);

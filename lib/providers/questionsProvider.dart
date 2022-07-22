@@ -48,7 +48,7 @@ class QuestionsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> generateQuestions(QuestionParams questionParams) async {
+  Future generateQuestions(QuestionParams questionParams) async {
     var queryParameters = {
       'amount': questionParams.amount,
       'category': questionParams.category,
@@ -56,9 +56,12 @@ class QuestionsProvider with ChangeNotifier {
       'type': questionParams.type,
     };
     var url = Uri.https('opentdb.com', '/api.php', queryParameters);
+    print("queryParameters: $queryParameters");
     try {
       final response = await http.post(url);
-      print("response $response");
+      var body = response.body;
+      final extractedData = json.decode(body);
+      print("response $extractedData");
       // _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
