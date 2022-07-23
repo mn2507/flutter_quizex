@@ -7,6 +7,7 @@ import 'package:quizex_flutter/providers/category.dart';
 import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/questionParams.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
+import 'package:quizex_flutter/screens/question_screen.dart';
 
 class MenuOptions extends StatefulWidget {
   const MenuOptions({Key key}) : super(key: key);
@@ -26,6 +27,14 @@ class _MenuOptionsState extends State<MenuOptions> {
   CategoryStatus _categoryStatus;
   QuestionsStatus _questionsStatus;
   QuestionParams _questionParams;
+
+  final _amount = const [
+    {'value': '10', 'label': '10'},
+    {'value': '20', 'label': '20'},
+    {'value': '30', 'label': '30'},
+    {'value': '40', 'label': '40'},
+    {'value': '50', 'label': '50'},
+  ];
 
   final _difficulty = const [
     {'value': '', 'label': 'Any'},
@@ -128,13 +137,16 @@ class _MenuOptionsState extends State<MenuOptions> {
     });
   }
 
-  Future<void> _startQuiz() async {
+  Future<void> _startQuiz(BuildContext ctx) async {
     try {
       _questionsStatus = QuestionsStatus.LOADING;
       var questionsResponse =
           await Provider.of<QuestionsProvider>(context, listen: false)
               .generateQuestions(_questionParams);
       _questionsStatus = QuestionsStatus.DONE;
+      setState(() {
+        Navigator.of(ctx).pushNamed(QuestionScreen.routeName);
+      });
     } catch (error) {
       _questionsStatus = QuestionsStatus.ERROR;
       await showDialog(
@@ -164,7 +176,8 @@ class _MenuOptionsState extends State<MenuOptions> {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text("Quizex")),
-          body: _categoryStatus == CategoryStatus.DONE
+          body: _categoryStatus == CategoryStatus.DONE &&
+                  _questionsStatus != QuestionsStatus.LOADING
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -209,8 +222,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                           value: categoryDropdownValue,
                           items: _category.map((category) {
                             return DropdownMenuItem(
-                              value: category
-                                  .id, //this is the sample, category fetched from API and shown here, this works
+                              value: category.id,
                               child: Text(category.name),
                             );
                           }).toList(),
@@ -235,13 +247,8 @@ class _MenuOptionsState extends State<MenuOptions> {
                           value: difficultyDropdownValue,
                           items: _difficulty.map((difficulty) {
                             return DropdownMenuItem(
-                              value: difficulty['value'], //
+                              value: difficulty['value'],
                               child: Text(difficulty['label']),
-                              // items: <String>['Any', 'Easy', 'Medium', 'Hard']
-                              //     .map<DropdownMenuItem<String>>((String value) {
-                              //   return DropdownMenuItem<String>(
-                              //     value: value,
-                              //     child: Text(value),
                             );
                           }).toList(),
                           onChanged: (String newValue) {
@@ -276,6 +283,8 @@ class _MenuOptionsState extends State<MenuOptions> {
                           },
                         ),
                       ),
+
+                      // Start Quiz button
                       Container(
                         margin: const EdgeInsets.only(
                           top: 20,
@@ -286,12 +295,14 @@ class _MenuOptionsState extends State<MenuOptions> {
                           child: ElevatedButton(
                             onPressed: () {
                               _setOptions();
-                              _startQuiz();
+                              _startQuiz(context);
                             },
                             child: const Text('Start Quiz'),
                           ),
                         ),
                       ),
+
+                      // Scoreboard button
                       Container(
                         margin: const EdgeInsets.only(
                           top: 20,
@@ -310,7 +321,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                 )
               : _categoryStatus == CategoryStatus.ERROR
                   ? Center(
-                      child: Text("$_errorMessage"),
+                      child: Text(_errorMessage),
                     )
                   : const Center(
                       child: CircularProgressIndicator(),

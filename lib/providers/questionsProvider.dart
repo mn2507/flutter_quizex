@@ -51,7 +51,7 @@ class QuestionsProvider with ChangeNotifier {
   Future generateQuestions(QuestionParams questionParams) async {
     var queryParameters = {
       'amount': questionParams.amount,
-      'category': questionParams.category,
+      'category': questionParams.category ?? '',
       'difficulty': questionParams.difficulty,
       'type': questionParams.type,
     };
