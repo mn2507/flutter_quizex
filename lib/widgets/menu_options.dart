@@ -7,7 +7,7 @@ import 'package:quizex_flutter/providers/category.dart';
 import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/questionParams.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
-import 'package:quizex_flutter/screens/question_screen.dart';
+import 'package:quizex_flutter/screens/question_screen_main.dart';
 
 class MenuOptions extends StatefulWidget {
   const MenuOptions({Key key}) : super(key: key);
@@ -48,47 +48,6 @@ class _MenuOptionsState extends State<MenuOptions> {
     {'value': 'multiple', 'label': 'Multiple'},
     {'value': 'boolean', 'label': 'True/False'},
   ];
-  final _questions = const [
-    {
-      'questionText': 'What\'s your favorite color?',
-      'answers': [
-        {'text': 'Black', 'score': 10},
-        {'text': 'Red', 'score': 5},
-        {'text': 'Green', 'score': 3},
-        {'text': 'White', 'score': 1}
-      ],
-    },
-    {
-      'questionText': 'What\'s your favorite animal?',
-      'answers': [
-        {'text': 'Rabbit', 'score': 3},
-        {'text': 'Snake', 'score': 11},
-        {'text': 'Elephant', 'score': 5},
-        {'text': 'Lion', 'score': 9}
-      ],
-    },
-    {
-      'questionText': 'Who\'s your favorite instructor?',
-      'answers': [
-        {'text': 'Max', 'score': 1},
-        {'text': 'Mux', 'score': 1},
-        {'text': 'Mix', 'score': 1},
-        {'text': 'Mox', 'score': 1}
-      ]
-    },
-  ];
-
-  var _questionIndex = 0;
-  var _totalScore = 0;
-
-  @override
-  void initState() {
-    // Provider.of<QuizQuestions>(context, listen: false).fetchCategories();
-    // Future.delayed(Duration.zero).then((_) {
-    //   Provider.of<QuizQuestions>(context).fetchCategories();
-    // });
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -101,29 +60,6 @@ class _MenuOptionsState extends State<MenuOptions> {
       // print("category: $_category");
     }
     // print("status: $_categoryStatus");
-  }
-
-  void _resetQuiz() {
-    setState(() {
-      // setState calls the build method everytime it has been triggered
-      _questionIndex = 0;
-      _totalScore = 0;
-    });
-  }
-
-  void _answerQuestion(int score) {
-    // Similar shorthands exist for subtraction (-=), multiplication(*=) or division (/=)
-    _totalScore += score;
-
-    setState(() {
-      _questionIndex = _questionIndex + 1;
-    });
-    print(_questionIndex);
-    if (_questionIndex < _questions.length) {
-      print('We have more questions!');
-    } else {
-      print('No more questions!');
-    }
   }
 
   void _setOptions() {
@@ -145,7 +81,7 @@ class _MenuOptionsState extends State<MenuOptions> {
               .generateQuestions(_questionParams);
       _questionsStatus = QuestionsStatus.DONE;
       setState(() {
-        Navigator.of(ctx).pushNamed(QuestionScreen.routeName);
+        Navigator.of(ctx).pushNamed(QuestionScreenMain.routeName);
       });
     } catch (error) {
       _questionsStatus = QuestionsStatus.ERROR;
@@ -325,16 +261,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                     )
                   : const Center(
                       child: CircularProgressIndicator(),
-                    )
-
-          // body: _questionIndex < _questions.length
-          //     ? Quiz(
-          //         answerQuestion: _answerQuestion,
-          //         questionIndex: _questionIndex,
-          //         questions: _questions,
-          //       )
-          //     : Result(_totalScore, _resetQuiz),
-          ),
+                    )),
     );
   }
 }

@@ -21,7 +21,7 @@ class Quiz extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Question(
+        QuestionOld(
           questions[questionIndex]
               ['questionText'], // if getting error here, add "as String"
         ),

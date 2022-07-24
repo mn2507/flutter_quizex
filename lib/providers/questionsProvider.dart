@@ -5,30 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizex_flutter/providers/category.dart';
 import 'package:quizex_flutter/providers/questionParams.dart';
+import 'package:quizex_flutter/question.dart';
+
+import 'question.dart';
 
 enum QuestionsStatus { ERROR, LOADING, DONE }
 
 class QuestionsProvider with ChangeNotifier {
   String errorMessage = "Network Error";
+  List<Question> _items = [];
 
-  // QuestionsProvider() {
-  //   status = QuestionsStatus.LOADING;
-  //   initScreen();
-  // }
-
-  // void initScreen() async {
-  //   try {
-  //     await generateQuestions();
-  //     status = QuestionsStatus.DONE;
-  //   } catch (e) {
-  //     status = QuestionsStatus.ERROR;
-  //   }
-  //   notifyListeners();
-  // }
-
-  // List<Category> get items {
-  //   return [..._items];
-  // }
+  List<Question> get items {
+    return [..._items];
+  }
 
   // List<Category> get favoriteItems {
   //   return _items.where((prodItem) => prodItem.isFavorite).toList();
@@ -60,8 +49,21 @@ class QuestionsProvider with ChangeNotifier {
     try {
       final response = await http.post(url);
       var body = response.body;
-      final extractedData = json.decode(body);
+      final extractedData = json.decode(body)['results'];
       print("response $extractedData");
+      final List<Question> loadedQuestion = [];
+
+      extractedData.forEach((questionData) {
+        loadedQuestion.add(Question(
+          category: questionData["category"].toString(),
+          type: questionData["type"].toString(),
+          difficulty: questionData["difficulty"].toString(),
+          question: questionData["question"].toString(),
+          correctAnswer: questionData["correct_answer"].toString(),
+          incorrectAnswers: questionData["incorrect_answers"],
+        ));
+      });
+      _items = loadedQuestion;
       // _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
