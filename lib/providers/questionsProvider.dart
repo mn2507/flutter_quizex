@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:quizex_flutter/providers/category.dart';
 import 'package:quizex_flutter/providers/questionParams.dart';
-import 'package:quizex_flutter/question.dart';
 
 import 'question.dart';
 
@@ -54,13 +51,15 @@ class QuestionsProvider with ChangeNotifier {
       final List<Question> loadedQuestion = [];
 
       extractedData.forEach((questionData) {
+        List<String> intList = questionData["incorrect_answers"].cast<String>();
+
         loadedQuestion.add(Question(
           category: questionData["category"].toString(),
           type: questionData["type"].toString(),
           difficulty: questionData["difficulty"].toString(),
           question: questionData["question"].toString(),
           correctAnswer: questionData["correct_answer"].toString(),
-          incorrectAnswers: questionData["incorrect_answers"],
+          incorrectAnswers: intList,
         ));
       });
       _items = loadedQuestion;
@@ -68,7 +67,7 @@ class QuestionsProvider with ChangeNotifier {
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
     } catch (error) {
-      print(error);
+      print("error: $error");
       throw error;
     }
   }

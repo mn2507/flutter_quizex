@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizex_flutter/providers/category.dart';
-import 'package:quizex_flutter/providers/questionParams.dart';
 
 enum CategoryStatus { ERROR, LOADING, DONE }
 

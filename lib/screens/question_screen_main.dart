@@ -22,8 +22,26 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final questionState = Provider.of<QuestionsProvider>(context);
-    _question = questionState.items;
+    _question = questionState.items.map((items) {
+      print('Entering');
+      List<String> items2 = items.incorrectAnswers;
+      items2.add(items.correctAnswer);
+      items2.shuffle();
+      items.allAnswers = items2;
+      return items;
+    }).toList();
     print(_question[0].question);
+
+    // correctAnswerList = widget.questions[widget.questionIndex].correctAnswer;
+    // allAnswers = widget.questions[widget.questionIndex].incorrectAnswers;
+
+    // allAnswers.add(correctAnswerList);
+
+    // allAnswers.shuffle();
+
+    // print("allAnswers: $allAnswers");
+    // print(widget.questions[widget.questionIndex].correctAnswer);
+    // print(widget.questions[widget.questionIndex].question);
     // print("status: $_categoryStatus");
   }
 
