@@ -20,28 +20,9 @@ class QuestionScreen extends StatefulWidget {
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
 }
-
 class _QuestionScreenState extends State<QuestionScreen> {
   String correctAnswerList;
   List<String> allAnswers;
-
-  // @override
-  // void didChangeDependencies() {
-    
-  //     correctAnswerList= widget.questions[widget.questionIndex].correctAnswer;
-  //   allAnswers = widget.questions[widget.questionIndex].incorrectAnswers;
-
-  //   allAnswers.add(correctAnswerList);
-
-  //   allAnswers.shuffle();
-
-  //   print("allAnswers: $allAnswers");
-  //   print(widget.questions[widget.questionIndex].correctAnswer);
-  //   print(widget.questions[widget.questionIndex].question);
-   
-    
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +32,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
           questionText: widget.questions[widget.questionIndex].question,
         ),
         ...(widget.questions[widget.questionIndex].allAnswers).map((answer) {
-          return AnswerOptions(widget.answerQuestion, answer);
+          return AnswerOptions(() => widget.answerQuestion(answer), answer);
         })
       ],
     );

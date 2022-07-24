@@ -19,20 +19,9 @@ class AnswerOptions extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             primary: Colors.orange, onPrimary: Colors.white),
-        // ButtonStyle(
-        //    backgroundColor: MaterialStateProperty.all(Colors.orange),
-        //    foregroundColor: MaterialStateProperty.all(Colors.white)
-        // ),
         child: Text(answerText),
         onPressed: selectHandler,
       ),
-
-      // RaisedButton(
-      //   color: Colors.blue,
-      //   textColor: Colors.white,
-      //   child: Text(answerText),
-      //   onPressed: selectHandler,
-      // ),
     );
   }
 }

@@ -17,35 +17,28 @@ class QuestionScreenMain extends StatefulWidget {
 class _QuestionScreenMainState extends State<QuestionScreenMain> {
   List<Question> _question;
   var _questionIndex = 0;
+  var _totalScore = 0;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final questionState = Provider.of<QuestionsProvider>(context);
     _question = questionState.items.map((items) {
-      print('Entering');
-      List<String> items2 = items.incorrectAnswers;
-      items2.add(items.correctAnswer);
-      items2.shuffle();
-      items.allAnswers = items2;
+      List<String> allAnswerItems = items.incorrectAnswers;
+      allAnswerItems.add(items.correctAnswer);
+      allAnswerItems.shuffle();
+      items.allAnswers = allAnswerItems;
       return items;
     }).toList();
-    print(_question[0].question);
-
-    // correctAnswerList = widget.questions[widget.questionIndex].correctAnswer;
-    // allAnswers = widget.questions[widget.questionIndex].incorrectAnswers;
-
-    // allAnswers.add(correctAnswerList);
-
-    // allAnswers.shuffle();
-
-    // print("allAnswers: $allAnswers");
-    // print(widget.questions[widget.questionIndex].correctAnswer);
-    // print(widget.questions[widget.questionIndex].question);
-    // print("status: $_categoryStatus");
+    // print(_question[0].question);
   }
 
-  void _answerQuestion() {
+  void _answerQuestion(String answeredText) {
+    print("answeredText: $answeredText");
+    print(_question[_questionIndex].correctAnswer);
+    if (answeredText == _question[_questionIndex].correctAnswer) {
+      _totalScore += 1;
+    }
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -69,7 +62,8 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
                   answerQuestion: _answerQuestion,
                   questionIndex: _questionIndex,
                 )
-              : Center(child: Text('Finished'))
+              : Center(
+                  child: Text('Total Score: $_totalScore/${_question.length}'))
         ],
       ),
     );
