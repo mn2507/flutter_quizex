@@ -16,24 +16,6 @@ class QuestionsProvider with ChangeNotifier {
     return [..._items];
   }
 
-  // List<Category> get favoriteItems {
-  //   return _items.where((prodItem) => prodItem.isFavorite).toList();
-  // }
-
-  // Category findById(String id) {
-  //   return _items.firstWhere((prod) => prod.id == id);
-  // }
-
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
-
   Future generateQuestions(QuestionParams questionParams) async {
     var queryParameters = {
       'amount': questionParams.amount,
@@ -63,27 +45,12 @@ class QuestionsProvider with ChangeNotifier {
         ));
       });
       _items = loadedQuestion;
-      // _items.add(newProduct);
-      // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
     } catch (error) {
-      print("error: $error");
+      print("questionsProviderError: $error");
       throw error;
     }
   }
 
-  // void updateProduct(String id, Product newProduct) {
-  //   final prodIndex = _items.indexWhere((prod) => prod.id == id);
-  //   if (prodIndex >= 0) {
-  //     _items[prodIndex] = newProduct;
-  //     notifyListeners();
-  //   } else {
-  //     print('...');
-  //   }
-  // }
-
-  // void deleteProduct(String id) {
-  //   _items.removeWhere((prod) => prod.id == id);
-  //   notifyListeners();
-  // }
+  
 }

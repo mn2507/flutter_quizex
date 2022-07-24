@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
+import 'package:quizex_flutter/providers/resultsProvider.dart';
 import 'package:quizex_flutter/screens/menu_screen.dart';
 import 'package:quizex_flutter/screens/question_screen_main.dart';
 import 'package:quizex_flutter/widgets/menu_options.dart';
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: QuestionsProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ResultsProvider(),
         ),
       ],
       child: MaterialApp(
