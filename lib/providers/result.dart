@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class Result with ChangeNotifier {
-  final int totalScore;
+  final String totalScore;
   final String dateTime;
-  final int totalDuration;
+  final String totalDuration;
 
   Result({
     @required this.totalScore,

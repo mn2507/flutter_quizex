@@ -8,6 +8,7 @@ import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/questionParams.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
 import 'package:quizex_flutter/screens/question_screen_main.dart';
+import 'package:quizex_flutter/screens/scoreboard_screen.dart';
 
 class MenuOptions extends StatefulWidget {
   const MenuOptions({Key key}) : super(key: key);
@@ -111,157 +112,161 @@ class _MenuOptionsState extends State<MenuOptions> {
         accentColor: Colors.deepOrange,
       ),
       home: Scaffold(
-          appBar: AppBar(title: const Text("Quizex")),
-          body: _categoryStatus == CategoryStatus.DONE &&
-                  _questionsStatus != QuestionsStatus.LOADING
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // No. of questions
-                      const Text(
-                        'Select number of questions:',
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
+        appBar: AppBar(title: const Text("Quizex")),
+        body: _categoryStatus == CategoryStatus.DONE &&
+                _questionsStatus != QuestionsStatus.LOADING
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // No. of questions
+                    const Text(
+                      'Select number of questions:',
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(left: 8.0),
+                      child: DropdownButton<String>(
+                        value: questionsDropdownValue,
+                        items: <String>['10', '20', '30', '40', '50']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            questionsDropdownValue = newValue;
+                          });
+                        },
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<String>(
-                          value: questionsDropdownValue,
-                          items: <String>['10', '20', '30', '40', '50']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              questionsDropdownValue = newValue;
-                            });
+                    ),
+
+                    // Category
+                    const Text(
+                      'Select category:',
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(left: 8.0),
+                      child: DropdownButton(
+                        hint: const Text('Any'),
+                        value: categoryDropdownValue,
+                        items: _category.map((category) {
+                          return DropdownMenuItem(
+                            value: category.id,
+                            child: Text(category.name),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            categoryDropdownValue = newValue;
+                          });
+                        },
+                      ),
+                    ),
+
+                    //Difficulty
+                    const Text(
+                      'Select difficulty:',
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(left: 8.0),
+                      child: DropdownButton<String>(
+                        value: difficultyDropdownValue,
+                        items: _difficulty.map((difficulty) {
+                          return DropdownMenuItem(
+                            value: difficulty['value'],
+                            child: Text(difficulty['label']),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            difficultyDropdownValue = newValue;
+                          });
+                        },
+                      ),
+                    ),
+
+                    // Type
+                    const Text(
+                      'Select type:',
+                      style: TextStyle(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(left: 8.0),
+                      child: DropdownButton<String>(
+                        value: typeDropdownValue,
+                        items: _type.map((type) {
+                          return DropdownMenuItem(
+                            value: type['value'],
+                            child: Text(type['label']),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            typeDropdownValue = newValue;
+                          });
+                        },
+                      ),
+                    ),
+
+                    // Start Quiz button
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 20,
+                      ),
+                      child: SizedBox(
+                        height: 50,
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _setOptions();
+                            _startQuiz(context);
                           },
+                          child: const Text('Start Quiz'),
                         ),
                       ),
+                    ),
 
-                      // Category
-                      const Text(
-                        'Select category:',
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
+                    // Scoreboard button
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 20,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(left: 8.0),
-                        child: DropdownButton(
-                          hint: const Text('Any'),
-                          value: categoryDropdownValue,
-                          items: _category.map((category) {
-                            return DropdownMenuItem(
-                              value: category.id,
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              categoryDropdownValue = newValue;
-                            });
+                      child: SizedBox(
+                        height: 50,
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(ScoreboardScreen.routeName);
                           },
+                          child: const Text('Scoreboard'),
                         ),
                       ),
-
-                      //Difficulty
-                      const Text(
-                        'Select difficulty:',
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<String>(
-                          value: difficultyDropdownValue,
-                          items: _difficulty.map((difficulty) {
-                            return DropdownMenuItem(
-                              value: difficulty['value'],
-                              child: Text(difficulty['label']),
-                            );
-                          }).toList(),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              difficultyDropdownValue = newValue;
-                            });
-                          },
-                        ),
-                      ),
-
-                      // Type
-                      const Text(
-                        'Select type:',
-                        style: TextStyle(fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(left: 8.0),
-                        child: DropdownButton<String>(
-                          value: typeDropdownValue,
-                          items: _type.map((type) {
-                            return DropdownMenuItem(
-                              value: type['value'],
-                              child: Text(type['label']),
-                            );
-                          }).toList(),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              typeDropdownValue = newValue;
-                            });
-                          },
-                        ),
-                      ),
-
-                      // Start Quiz button
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 20,
-                        ),
-                        child: SizedBox(
-                          height: 50,
-                          width: 200,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _setOptions();
-                              _startQuiz(context);
-                            },
-                            child: const Text('Start Quiz'),
-                          ),
-                        ),
-                      ),
-
-                      // Scoreboard button
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 20,
-                        ),
-                        child: SizedBox(
-                          height: 50,
-                          width: 200,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Scoreboard'),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : _categoryStatus == CategoryStatus.ERROR
-                  ? Center(
-                      child: Text(_errorMessage),
                     )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    )),
+                  ],
+                ),
+              )
+            : _categoryStatus == CategoryStatus.ERROR
+                ? Center(
+                    child: Text(_errorMessage),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+      ),
     );
   }
 }

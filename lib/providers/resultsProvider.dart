@@ -7,18 +7,37 @@ import 'result.dart';
 enum ResultsStatus { ERROR, LOADING, DONE }
 
 class ResultsProvider with ChangeNotifier {
+  String errorMessage = "Network Error";
   List<Result> _items = [];
+  ResultsStatus resultsStatus;
+
+  // ResultsProvider() {
+  //   resultsStatus = ResultsStatus.LOADING;
+  //   initScreen();
+  // }
+
+  // void initScreen() async {
+  //   try {
+  //     await getResults();
+  //     resultsStatus = ResultsStatus.DONE;
+  //   } catch (e) {
+  //     resultsStatus = ResultsStatus.ERROR;
+  //   }
+  //   notifyListeners();
+  // }
 
   List<Result> get items {
     return [..._items];
   }
 
-  Future getResults() async {
-    final url = Uri.parse(
-        'quizex-flutter-default-rtdb.asia-southeast1.firebasedatabase.app/scoreboard.json');
+  Future<void> getResults() async {
+    final url = Uri.https(
+        'quizex-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+        '/scoreboard.json');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print("extractedData $extractedData");
       final List<Result> loadedResults = [];
       extractedData.forEach((resultId, resultData) {
         loadedResults.add(Result(

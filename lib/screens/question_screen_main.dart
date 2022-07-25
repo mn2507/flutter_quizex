@@ -73,9 +73,9 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   void _setResultData() {
     setState(() {
       _result = Result(
-        totalScore: _totalScore,
+        totalScore: '$_totalScore/${_question.length}',
         dateTime: _startDateTime,
-        totalDuration: _totalDuration.inSeconds,
+        totalDuration: '${_totalDuration.inSeconds} seconds',
       );
     });
     _generateResult();
@@ -84,14 +84,16 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Future _generateResult() async {
     try {
       _resultsStatus = ResultsStatus.LOADING;
+      print("_resultsStatus: $_resultsStatus");
       var questionsResponse =
           await Provider.of<ResultsProvider>(context, listen: false)
               .addResult(_result);
       _resultsStatus = ResultsStatus.DONE;
+      print("_resultsStatus: $_resultsStatus");
     } catch (error) {
       _resultsStatus = ResultsStatus.ERROR;
       print("_generateResultError: $error");
-      throw error;
+      rethrow;
       // await showDialog(
       //   context: context,
       //   builder: (ctx) => AlertDialog(
@@ -114,19 +116,15 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Quizex")),
-      body: Column(
-        children: [
-          _questionIndex < _question.length
-              ? QuestionScreen(
-                  questions: _question,
-                  answerQuestion: _answerQuestion,
-                  questionIndex: _questionIndex,
-                )
-              : Center(
-                  child: Text('Total Score: $_totalScore/${_question.length}'),
-                )
-        ],
-      ),
+      body: _questionIndex < _question.length
+          ? QuestionScreen(
+              questions: _question,
+              answerQuestion: _answerQuestion,
+              questionIndex: _questionIndex,
+            )
+          : Center(
+              child: Text('Total Score: $_totalScore/${_question.length}'),
+            ),
     );
   }
 }

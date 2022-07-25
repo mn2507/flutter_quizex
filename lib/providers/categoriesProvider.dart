@@ -47,7 +47,7 @@ class CategoriesProvider with ChangeNotifier {
         ));
       });
       _items = loadedCategory;
-      notifyListeners();
+      // notifyListeners();
     } catch (error) {
       print("categoriesProviderError: $error");
       throw (error);
