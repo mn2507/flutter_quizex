@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
 import 'package:quizex_flutter/providers/questionParams.dart';
 
@@ -31,17 +32,19 @@ class QuestionsProvider with ChangeNotifier {
       final extractedData = json.decode(body)['results'];
       print("response $extractedData");
       final List<Question> loadedQuestion = [];
+      var unescape = HtmlUnescape();
 
       extractedData.forEach((questionData) {
-        List<String> intList = questionData["incorrect_answers"].cast<String>();
+        List<String> incorrectAnswersString =
+            questionData["incorrect_answers"].cast<String>();
 
         loadedQuestion.add(Question(
           category: questionData["category"].toString(),
           type: questionData["type"].toString(),
           difficulty: questionData["difficulty"].toString(),
-          question: questionData["question"].toString(),
+          question: unescape.convert(questionData["question"].toString()),
           correctAnswer: questionData["correct_answer"].toString(),
-          incorrectAnswers: intList,
+          incorrectAnswers: incorrectAnswersString,
         ));
       });
       _items = loadedQuestion;
@@ -51,6 +54,4 @@ class QuestionsProvider with ChangeNotifier {
       throw error;
     }
   }
-
-  
 }

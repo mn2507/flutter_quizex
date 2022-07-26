@@ -2,6 +2,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class AnswerOptions extends StatelessWidget {
   final Function selectHandler;
@@ -18,6 +19,7 @@ class AnswerOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var unescape = HtmlUnescape();
     return Container(
       width: double.infinity,
       child: ElevatedButton(
@@ -26,8 +28,8 @@ class AnswerOptions extends StatelessWidget {
                 primary: Colors.green, onPrimary: Colors.white)
             : ElevatedButton.styleFrom(
                 primary: Colors.orange, onPrimary: Colors.white),
-        child: Text(answerText),
         onPressed: selectHandler,
+        child: Text(unescape.convert(answerText)),
       ),
     );
   }
