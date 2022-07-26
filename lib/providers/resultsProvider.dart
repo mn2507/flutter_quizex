@@ -37,7 +37,7 @@ class ResultsProvider with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      print("extractedData $extractedData");
+      // print("extractedData $extractedData");
       final List<Result> loadedResults = [];
       extractedData.forEach((resultId, resultData) {
         loadedResults.add(Result(

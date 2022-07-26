@@ -28,6 +28,7 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Duration _totalDuration;
   ResultsStatus _resultsStatus;
   Result _result;
+  var _answered = false;
 
   @override
   void didChangeDependencies() {
@@ -35,7 +36,7 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
     final questionState = Provider.of<QuestionsProvider>(context);
     _startDateTime = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
     _startDuration = DateTime.now();
-    print("startTime: $_startDateTime");
+    // print("startTime: $_startDateTime");
     _question = questionState.items.map((items) {
       List<String> allAnswerItems = items.incorrectAnswers;
       allAnswerItems.add(items.correctAnswer);
@@ -47,27 +48,33 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   }
 
   void _answerQuestion(String answeredText) {
-    print("answeredText: $answeredText");
-    print(_question[_questionIndex].correctAnswer);
+    // print("answeredText: $answeredText");
+    // print(_question[_questionIndex].correctAnswer);
     if (answeredText == _question[_questionIndex].correctAnswer) {
       _totalScore += 1;
     }
     setState(() {
-      _questionIndex = _questionIndex + 1;
+      _answered = true;
     });
-    // print("_questionIndex: $_questionIndex");
-    if (_questionIndex < _question.length) {
-      // print('We have more questions!');
-    } else {
-      _endDateTime = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
-      _endDuration = DateTime.now();
-      print("endTime: $_endDateTime");
-      _totalDuration = _endDuration.difference(_startDuration);
-      print("duration: ${_totalDuration.inSeconds}");
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        _questionIndex = _questionIndex + 1;
+        _answered = false;
+      });
+      // print("_questionIndex: $_questionIndex");
+      if (_questionIndex < _question.length) {
+        // print('We have more questions!');
+      } else {
+        _endDateTime = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
+        _endDuration = DateTime.now();
+        // print("endTime: $_endDateTime");
+        _totalDuration = _endDuration.difference(_startDuration);
+        // print("duration: ${_totalDuration.inSeconds}");
 
-      _setResultData();
-      // print('No more questions!');
-    }
+        _setResultData();
+        // print('No more questions!');
+      }
+    });
   }
 
   void _setResultData() {
@@ -84,15 +91,15 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Future _generateResult() async {
     try {
       _resultsStatus = ResultsStatus.LOADING;
-      print("_resultsStatus: $_resultsStatus");
+      // print("_resultsStatus: $_resultsStatus");
       var questionsResponse =
           await Provider.of<ResultsProvider>(context, listen: false)
               .addResult(_result);
       _resultsStatus = ResultsStatus.DONE;
-      print("_resultsStatus: $_resultsStatus");
+      // print("_resultsStatus: $_resultsStatus");
     } catch (error) {
       _resultsStatus = ResultsStatus.ERROR;
-      print("_generateResultError: $error");
+      // print("_generateResultError: $error");
       rethrow;
       // await showDialog(
       //   context: context,
@@ -121,6 +128,7 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
               questions: _question,
               answerQuestion: _answerQuestion,
               questionIndex: _questionIndex,
+              answered: _answered,
             )
           : Center(
               child: Text('Total Score: $_totalScore/${_question.length}'),
