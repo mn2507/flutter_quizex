@@ -46,7 +46,7 @@ class _MenuOptionsState extends State<MenuOptions> {
 
   final _type = const [
     {'value': '', 'label': 'Any Type'},
-    {'value': 'multiple', 'label': 'Multiple'},
+    {'value': 'multiple', 'label': 'Multiple Choice'},
     {'value': 'boolean', 'label': 'True/False'},
   ];
 
@@ -75,6 +75,15 @@ class _MenuOptionsState extends State<MenuOptions> {
       (type) => type["value"] == chosenValue,
     );
     return chosenTypeMap['label'];
+  }
+
+  void _resetOptions() {
+    setState(() {
+      questionsDropdownValue = '10';
+      categoryDropdownValue = null;
+      difficultyDropdownValue = '';
+      typeDropdownValue = '';
+    });
   }
 
   void _setOptions() {
@@ -276,7 +285,21 @@ class _MenuOptionsState extends State<MenuOptions> {
                           child: const Text('Scoreboard'),
                         ),
                       ),
-                    )
+                    ),
+
+                    // Reset Options button
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.red,
+                          textStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: _resetOptions,
+                        child: const Text('Reset Options'),
+                      ),
+                    ),
                   ],
                 ),
               )
