@@ -11,6 +11,8 @@ import 'package:quizex_flutter/providers/result.dart';
 import 'package:quizex_flutter/providers/resultsProvider.dart';
 import 'package:quizex_flutter/widgets/question_screen.dart';
 
+import 'scoreboard_screen.dart';
+
 class QuestionScreenMain extends StatefulWidget {
   static const routeName = '/question';
 
@@ -157,19 +159,83 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
                   answered: _answered,
                 )
               : Center(
-                  child: Text('Total Score: $_totalScore/${_question.length}',
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      )),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Total Score: $_totalScore/${_question.length}',
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      // Go to Scoreboard button
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                        ),
+                        child: SizedBox(
+                          height: 50,
+                          width: 200,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(ScoreboardScreen.routeName);
+                            },
+                            child: const Text('Go to Scoreboard'),
+                          ),
+                        ),
+                      ),
+
+                      // Back to Main Menu button
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            textStyle:
+                                const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Back to Main Menu'),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
-          : const Center(
-              child: Text('No questions available for the selected options.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  )),
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                        'No questions available for the selected options.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        )),
+
+                    // Back to Main Menu button
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Back to Main Menu'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
     );
   }

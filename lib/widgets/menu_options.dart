@@ -264,6 +264,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                             _setOptions();
                             _startQuiz(context);
                           },
+                          style: ElevatedButton.styleFrom(
+                              textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
                           child: const Text('Start Quiz'),
                         ),
                       ),

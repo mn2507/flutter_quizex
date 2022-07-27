@@ -46,14 +46,17 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
               : const Center(
                   child: CircularProgressIndicator(),
                 )
-          : const Center(
-              child: Text('No scores have been recorded.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
+          : const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Center(
+                child: Text('No scores have been recorded.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+          ),
     );
   }
 }
