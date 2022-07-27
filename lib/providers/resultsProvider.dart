@@ -52,6 +52,7 @@ class ResultsProvider with ChangeNotifier {
       _items = loadedResults;
       notifyListeners();
     } catch (error) {
+      _items = [];
       print("getResultsError: $error");
       throw (error);
     }

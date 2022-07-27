@@ -21,13 +21,23 @@ class AnswerOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     var unescape = HtmlUnescape();
     return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40),
       width: double.infinity,
       child: ElevatedButton(
-        style: answerText == correctAnswer && answered
-            ? ElevatedButton.styleFrom(
-                primary: Colors.green, onPrimary: Colors.white)
-            : ElevatedButton.styleFrom(
-                primary: Colors.orange, onPrimary: Colors.white),
+        style: ElevatedButton.styleFrom(
+          elevation: 5,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          primary: answerText == correctAnswer && answered
+              ? Colors.green
+              : Colors.orange,
+          onPrimary: Colors.white,
+          alignment: Alignment.center,
+          textStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         onPressed: selectHandler,
         child: Text(unescape.convert(answerText)),
       ),

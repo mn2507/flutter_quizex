@@ -152,13 +152,17 @@ class _MenuOptionsState extends State<MenuOptions> {
                     // No. of questions
                     const Text(
                       'Select number of questions:',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.only(left: 8.0),
                       child: DropdownButton<String>(
+                        
                         value: questionsDropdownValue,
                         items: <String>['10', '20', '30', '40', '50']
                             .map<DropdownMenuItem<String>>((String value) {
@@ -178,7 +182,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                     // Category
                     const Text(
                       'Select category:',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Container(
@@ -204,7 +211,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                     //Difficulty
                     const Text(
                       'Select difficulty:',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Container(
@@ -229,7 +239,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                     // Type
                     const Text(
                       'Select type:',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Container(
@@ -265,9 +278,11 @@ class _MenuOptionsState extends State<MenuOptions> {
                             _startQuiz(context);
                           },
                           style: ElevatedButton.styleFrom(
-                              textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
                           child: const Text('Start Quiz'),
                         ),
                       ),
@@ -282,6 +297,11 @@ class _MenuOptionsState extends State<MenuOptions> {
                         height: 50,
                         width: 200,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed(ScoreboardScreen.routeName);
@@ -297,8 +317,10 @@ class _MenuOptionsState extends State<MenuOptions> {
                       child: TextButton(
                         style: TextButton.styleFrom(
                           primary: Colors.red,
-                          textStyle:
-                              const TextStyle(fontWeight: FontWeight.bold),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                         onPressed: _resetOptions,
                         child: const Text('Reset Options'),
