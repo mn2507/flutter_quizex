@@ -30,7 +30,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   @override
   Widget build(BuildContext context) {
     _correctAnswer = widget.questions[widget.questionIndex].correctAnswer;
-    widget.answered ? print("answerQuestion yes") : print("answerQuestion no");
+    // widget.answered ? print("answerQuestion yes") : print("answerQuestion no");
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

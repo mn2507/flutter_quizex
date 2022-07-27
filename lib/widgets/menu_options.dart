@@ -63,6 +63,20 @@ class _MenuOptionsState extends State<MenuOptions> {
     // print("status: $_categoryStatus");
   }
 
+  String findDifficultyByValue(String chosenValue) {
+    var chosenDiffMap = _difficulty.firstWhere(
+      (diff) => diff["value"] == chosenValue,
+    );
+    return chosenDiffMap['label'];
+  }
+
+  String findTypeByValue(String chosenValue) {
+    var chosenTypeMap = _type.firstWhere(
+      (type) => type["value"] == chosenValue,
+    );
+    return chosenTypeMap['label'];
+  }
+
   void _setOptions() {
     setState(() {
       _questionParams = QuestionParams(
@@ -82,7 +96,14 @@ class _MenuOptionsState extends State<MenuOptions> {
               .generateQuestions(_questionParams);
       _questionsStatus = QuestionsStatus.DONE;
       setState(() {
-        Navigator.of(ctx).pushNamed(QuestionScreenMain.routeName);
+        Navigator.of(ctx).pushNamed(
+          QuestionScreenMain.routeName,
+          arguments: {
+            'chosenCategoryId': categoryDropdownValue ?? "",
+            'chosenDifficulty': findDifficultyByValue(difficultyDropdownValue),
+            'chosenType': findTypeByValue(typeDropdownValue),
+          },
+        );
       });
     } catch (error) {
       _questionsStatus = QuestionsStatus.ERROR;

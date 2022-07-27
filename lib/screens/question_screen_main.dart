@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/question.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
 import 'package:quizex_flutter/providers/result.dart';
@@ -30,9 +31,30 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Result _result;
   var _answered = false;
 
+  String chosenCategoryId;
+  String chosenDifficulty;
+  String chosenType;
+  String chosenCategoryName = "Any";
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Get chosen category and difficulty
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    chosenCategoryId = routeArgs['chosenCategoryId'];
+    chosenDifficulty = routeArgs['chosenDifficulty'];
+    chosenType = routeArgs['chosenType'];
+    if (chosenCategoryId.isNotEmpty) {
+      var chosenCategory = Provider.of<CategoriesProvider>(
+        context,
+        listen: false,
+      ).findById(chosenCategoryId);
+      chosenCategoryName = chosenCategory.name;
+      // print("chosenCategoryName:  $chosenCategoryName");
+    }
+
+    // Set quiz start time
     final questionState = Provider.of<QuestionsProvider>(context);
     _startDateTime = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
     _startDuration = DateTime.now();
@@ -83,6 +105,9 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
         totalScore: '$_totalScore/${_question.length}',
         dateTime: _startDateTime,
         totalDuration: '${_totalDuration.inSeconds} seconds',
+        chosenCategory: chosenCategoryName,
+        chosenDifficulty: chosenDifficulty,
+        chosenType: chosenType,
       );
     });
     _generateResult();
@@ -123,15 +148,28 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Quizex")),
-      body: _questionIndex < _question.length
-          ? QuestionScreen(
-              questions: _question,
-              answerQuestion: _answerQuestion,
-              questionIndex: _questionIndex,
-              answered: _answered,
-            )
-          : Center(
-              child: Text('Total Score: $_totalScore/${_question.length}'),
+      body: _question.isNotEmpty
+          ? _questionIndex < _question.length
+              ? QuestionScreen(
+                  questions: _question,
+                  answerQuestion: _answerQuestion,
+                  questionIndex: _questionIndex,
+                  answered: _answered,
+                )
+              : Center(
+                  child: Text('Total Score: $_totalScore/${_question.length}',
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      )),
+                )
+          : const Center(
+              child: Text('No questions available for the selected options.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
     );
   }

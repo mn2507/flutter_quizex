@@ -30,6 +30,10 @@ class CategoriesProvider with ChangeNotifier {
     return [..._items];
   }
 
+  Category findById(String id) {
+    return _items.firstWhere((cat) => cat.id == id);
+  }
+
   Future fetchCategories() async {
     final url = Uri.parse('https://opentdb.com/api_category.php');
     try {

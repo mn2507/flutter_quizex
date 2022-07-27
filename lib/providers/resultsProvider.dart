@@ -44,6 +44,9 @@ class ResultsProvider with ChangeNotifier {
           totalScore: resultData['totalScore'],
           dateTime: resultData['dateTime'],
           totalDuration: resultData['totalDuration'],
+          chosenCategory: resultData['chosenCategory'],
+          chosenDifficulty: resultData['chosenDifficulty'],
+          chosenType: resultData['chosenType'],
         ));
       });
       _items = loadedResults;
@@ -65,6 +68,9 @@ class ResultsProvider with ChangeNotifier {
           'totalScore': result.totalScore,
           'dateTime': result.dateTime,
           'totalDuration': result.totalDuration,
+          'chosenCategory': result.chosenCategory,
+          'chosenDifficulty': result.chosenDifficulty,
+          'chosenType': result.chosenType,
         }),
       );
       notifyListeners();
