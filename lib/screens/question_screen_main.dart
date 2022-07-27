@@ -179,6 +179,12 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
                           height: 50,
                           width: 200,
                           child: ElevatedButton(
+                            style: TextButton.styleFrom(
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.of(context)
                                   .pushNamed(ScoreboardScreen.routeName);
@@ -193,8 +199,10 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
                         padding: const EdgeInsets.only(top: 15),
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            textStyle:
-                                const TextStyle(fontWeight: FontWeight.bold),
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -224,8 +232,10 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
                       padding: const EdgeInsets.only(top: 15),
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          textStyle:
-                              const TextStyle(fontWeight: FontWeight.bold),
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
