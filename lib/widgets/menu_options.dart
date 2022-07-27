@@ -38,14 +38,14 @@ class _MenuOptionsState extends State<MenuOptions> {
   ];
 
   final _difficulty = const [
-    {'value': '', 'label': 'Any'},
+    {'value': '', 'label': 'Any Difficulty'},
     {'value': 'easy', 'label': 'Easy'},
     {'value': 'medium', 'label': 'Medium'},
     {'value': 'hard', 'label': 'Hard'},
   ];
 
   final _type = const [
-    {'value': '', 'label': 'Any'},
+    {'value': '', 'label': 'Any Type'},
     {'value': 'multiple', 'label': 'Multiple'},
     {'value': 'boolean', 'label': 'True/False'},
   ];
@@ -176,7 +176,7 @@ class _MenuOptionsState extends State<MenuOptions> {
                       padding: const EdgeInsets.all(10),
                       margin: const EdgeInsets.only(left: 8.0),
                       child: DropdownButton(
-                        hint: const Text('Any'),
+                        hint: const Text('Any Category'),
                         value: categoryDropdownValue,
                         items: _category.map((category) {
                           return DropdownMenuItem(

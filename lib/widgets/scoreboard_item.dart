@@ -21,27 +21,72 @@ class _ScoreboardItemState extends State<ScoreboardItem> {
       margin: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          ListTile(
-            title: Text.rich(
-              TextSpan(
-                text: 'Total score: ', // default text style
-                children: <TextSpan>[
-                  TextSpan(
-                      text: widget.result.totalScore,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-            subtitle: Text(widget.result.dateTime),
-            trailing: Text.rich(
-              TextSpan(
-                text: 'Duration: ', // default text style
-                children: <TextSpan>[
-                  TextSpan(
-                      text: widget.result.totalDuration,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
+          SizedBox(
+            height: 180,
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text.rich(
+                    TextSpan(
+                      text: 'Total score: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget.result.totalScore,
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  subtitle: Text(widget.result.dateTime),
+                  trailing: Text.rich(
+                    TextSpan(
+                      text: 'Duration: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget.result.totalDuration,
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
+                 Chip(
+                    label: Text(
+                      widget.result.chosenCategory,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryTextTheme.headline6.color,
+                      ),
+                    ),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Chip(
+                          label: Text(
+                            widget.result.chosenDifficulty,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryTextTheme.headline6.color,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Chip(
+                          label: Text(
+                            widget.result.chosenType,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryTextTheme.headline6.color,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ),
         ],

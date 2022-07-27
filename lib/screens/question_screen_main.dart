@@ -34,7 +34,7 @@ class _QuestionScreenMainState extends State<QuestionScreenMain> {
   String chosenCategoryId;
   String chosenDifficulty;
   String chosenType;
-  String chosenCategoryName = "Any";
+  String chosenCategoryName = "Any Category";
 
   @override
   void didChangeDependencies() {
