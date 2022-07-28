@@ -37,26 +37,26 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
       appBar: AppBar(
         title: const Text('Scoreboard'),
       ),
-      body: resultsData.items.isNotEmpty
-          ? _resultsStatus != ResultsStatus.LOADING
+      body: _resultsStatus != ResultsStatus.LOADING
+          ? resultsData.items.isNotEmpty
               ? ListView.builder(
                   itemCount: resultsData.items.length,
                   itemBuilder: (ctx, i) => ScoreboardItem(resultsData.items[i]),
                 )
-              : const Center(
-                  child: CircularProgressIndicator(),
+              : const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text('No scores have been recorded.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                 )
-          : const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(
-                child: Text('No scores have been recorded.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-          ),
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }

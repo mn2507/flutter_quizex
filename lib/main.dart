@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quizex_flutter/providers/categoriesProvider.dart';
 import 'package:quizex_flutter/providers/questionsProvider.dart';
@@ -8,7 +9,16 @@ import 'package:quizex_flutter/screens/question_screen_main.dart';
 import 'package:quizex_flutter/screens/scoreboard_screen.dart';
 import 'package:quizex_flutter/widgets/menu_options.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // Disable landscape mode
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
